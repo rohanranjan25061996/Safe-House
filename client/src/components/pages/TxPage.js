@@ -25,7 +25,7 @@ const style = {
   pb: 3,
 };
 
-function ChildModal() {
+export default function Transaction() {
   const [age, setAge] = React.useState('');
 
   const handleChange = (event) => {
@@ -109,44 +109,3 @@ function ChildModal() {
   );
 }
 
-export default function Transaction() {
-   
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  return (
-    <div>
-      <Button variant="contained" sl style={{ background: '#008c73' }} onClick={handleOpen}>New Transaction</Button>
-      <Modal
-        open={open}
-        onClose={handleClose}
-      
-      >
-        <Box sx={{ ...style, width: 400 }}>
-         
-        <Stack alignItems="center">
-        <div style={{display:"flex",justifyContent: "space-between"}}>
-
-        <p>Send</p>
-        <p style={{marginLeft:"250px"}} onClick={handleClose}><CloseIcon/> </p>
-        </div> 
-        <Divider />
-       
-        <ChildModal />
-         <Button variant="contained" sl style={{ background: '#008c73',width:"200px" }} onClick={handleOpen}>Send NFT</Button>
-         
-          </Stack>
-       
-          
-         
-
-        </Box>
-      </Modal>
-    </div>
-  );
-}

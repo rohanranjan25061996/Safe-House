@@ -39,10 +39,11 @@ export default function ClippedDrawer() {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
-    const {isAuth, setUserAddress, handelAuth, userAddress, allSubDao, setActiveDAO} = React.useContext(AuthContext);
+    const {balance, setBalance, isAuth, setUserAddress, handelAuth, userAddress, allSubDao, activeDAO, setActiveDAO} = React.useContext(AuthContext);
 
     const {isAuthenticated, isWeb3Enabled, authenticate, enableWeb3, logout} = useMoralis();
 
+    console.log(allSubDao);
     React.useEffect(() => {
         if (!isWeb3Enabled && isAuthenticated) {
           enableWeb3({ provider: "walletconnect", chainId: 56 });
@@ -82,6 +83,8 @@ export default function ClippedDrawer() {
     const handleCloseUserMenu = () => {
       setAnchorElUser(null);
     };
+
+    // uef
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -205,8 +208,8 @@ export default function ClippedDrawer() {
   
           <Stack alignItems="center">
           <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-          <Typography  align="center">rin:{concatStringAddress(userAddress)}</Typography>
-          <Typography  align="center">0.00 USD</Typography>
+          <Typography  align="center">rin:{concatStringAddress(activeDAO)}</Typography>
+          <Typography  align="center">{balance} ETH</Typography>
          <Transaction/>
         
          
@@ -215,19 +218,8 @@ export default function ClippedDrawer() {
           </List>
           <Divider />
           <List>
-            {['Assets', 'Coin', 'Settings'].map((text, index) => (
-              <ListItem button key={text}>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
             {isAuth && allSubDao.length !== 0 && allSubDao.map((item) => (
               <ListItem button key={item}>
-              {/* <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon> */}
               <ListItemText primary={concatStringAddress(item)} onClick={() => changeActiveDAO(item)} />
             </ListItem>
             ))}
