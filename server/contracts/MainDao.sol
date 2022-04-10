@@ -68,6 +68,7 @@ contract MainDAO is Create2{
     }
 
     function getData(address _walletAddress) dataOrNot nullCheckAddress(_walletAddress) public view returns(DAO memory){
+        require(check[_walletAddress], "new user");
         uint _id = getId[_walletAddress];
         return allDAO[_id];
     }

@@ -1,6 +1,6 @@
 const main = async () => {
 
-    // contract address 0x433E7F9883C4EC915fe45d4c0dc6Ff7E4d72aA4f
+    // contract address 0xd8B2185B52E9212d97Db1d058F83ed0C615B3399
     const MainDAO = await ethers.getContractFactory("MainDAO");
     const wallet = await MainDAO.deploy();
 
