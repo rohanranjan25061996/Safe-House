@@ -34,6 +34,9 @@ contract MultiSigner {
     // this multisigwallet function we can put in constructor, but now i don't know how to deploy contract from frontend, that why i create function
     // and also not putting validation for others functions.
 
+    // recived ether
+    receive() external payable{}
+
     constructor(address[] memory _owner, string[] memory _ownerName, uint _limit, string memory _safeName) {
         require(_owner.length > 0, "Owners Required !");
         require(_limit > 0 && _limit <= _owner.length, "Invalid number of required approver's !");
