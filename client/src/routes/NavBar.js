@@ -29,6 +29,7 @@ import {useMoralis} from "react-moralis"
 import {concatStringAddress} from "../utils/helper"
 import CreateNewSafe from '../components/pages/CreateSafe';
 import Main from '../components/pages/Main';
+import { ConfirmAlert } from '../components/ConfirmAlert';
 
 const drawerWidth = 240;
 const settings = ['Logout'];
@@ -216,6 +217,8 @@ export default function ClippedDrawer() {
           </Stack>
             
           </List>
+          <Divider />
+          {/* <ConfirmAlert /> */}
           <Divider />
           <List>
             {isAuth && allSubDao.length !== 0 && allSubDao.map((item) => (

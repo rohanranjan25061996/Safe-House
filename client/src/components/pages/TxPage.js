@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useContext } from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
@@ -11,6 +11,8 @@ import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import styles from "../../styles/TxPage.module.css";
+import { AuthContext } from "../../contextAPI/Auth";
 
 const style = {
   position: 'absolute',
@@ -25,25 +27,53 @@ const style = {
   pb: 3,
 };
 
+
 export default function Transaction() {
-  const [age, setAge] = React.useState('');
+
+  const { alert, setAlert } = useContext(AuthContext)
+
+  const [age, setAge] = useState('');
+  const [address, setAddress] = useState('');
+  const [amount, setAmount] = useState(0);
 
   const handleChange = (event) => {
-      setAge(event.target.value);
-    }; 
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => {
-    setOpen(true);
+    setAge(event.target.value);
   };
+
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    console.log("send transfer clicked");
+    setOpen(true);
+    setAlert({status: true, msg: "Something went wrong"})
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
 
+  const handleSubmit =  () => {
+    console.log("address: ", address);
+    console.log("amount: ", amount);
+  }
+
   return (
-    <React.Fragment>
-     
-      <Button variant="contained"  style={{ background: '#008c73',width:"200px",margin:"10px" }} onClick={handleOpen}>Send Funds</Button>
-      <Modal
+    <>
+
+      <Button variant="contained" style={{ background: '#008c73', width: "200px", margin: "10px" }} onClick={() => handleOpen()}>Send Funds</Button>
+
+      {
+        open &&
+        <div className={styles.wrapper}>
+          <div className={styles.overlay} onClick={handleClose} />
+          <div className={styles.modalDiv}>
+            <input value={address} onChange={(e) => setAddress(e.target.value)} className={styles.modalInput} placeholder='Receiver Address' />
+            <input value={amount} onChange={(e) => setAmount(e.target.value)} className={styles.modalInput} placeholder="Amount" />
+            <button className={styles.modalSubmit} onClick={handleSubmit}>SEND</button>
+          </div>
+        </div>
+      }
+      {/* <Modal
         hideBackdrop
         open={open}
         onClose={handleClose}
@@ -104,8 +134,8 @@ export default function Transaction() {
         <Button variant="contained"  style={{ background: '#008c73',width:"200px",margin:"10px" }} onClick={handleOpen}>Review</Button>
         </div>
         </Box>
-      </Modal>
-    </React.Fragment>
+      </Modal> */}
+    </ >
   );
 }
 

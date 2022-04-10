@@ -9,6 +9,7 @@ export const AuthContextProvider = ({ children }) => {
     const [allSubDao, setAllSubDao] = React.useState([])
     const [activeDAO, setActiveDAO] = React.useState('')
     const [balance, setBalance] = useState();
+    const [alert, setAlert] = useState({});
 
     React.useEffect(() => {
         if(allSubDao.length === 1){
@@ -22,7 +23,7 @@ export const AuthContextProvider = ({ children }) => {
         setAuth((prev) => !prev)
     }
 
-    const value = {balance, setBalance, isAuth, handelAuth, userAddress, setUserAddress, allSubDao, setAllSubDao, activeDAO, setActiveDAO}
+    const value = {balance, setBalance, isAuth, handelAuth, userAddress, setUserAddress, allSubDao, setAllSubDao, activeDAO, setActiveDAO, alert, setAlert}
 
     return(
         <AuthContext.Provider value = {value}> {children} </AuthContext.Provider>
