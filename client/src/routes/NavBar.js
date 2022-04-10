@@ -87,7 +87,7 @@ export default function ClippedDrawer() {
 
     // uef
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex'}}>
       <CssBaseline />
       <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }} style={{ background: '#2E3B55',color:"white" }}>
       <Container maxWidth="xl">
