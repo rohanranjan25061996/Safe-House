@@ -1,0 +1,23 @@
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+}
+
+.pageNameDiv {
+    display: flex;
+    align-items: center;
+}
+
+.walletDiv {
+    color: white;
+    width: 230px;
+}
+
+.walletMenu {
+    /* border: 1px solid red;
+    padding-left: 15px; */
+}
+
+.walletMenuItem {
+    width: 200px;
+}

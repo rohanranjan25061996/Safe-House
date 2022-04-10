@@ -19,7 +19,6 @@ export const AuthContextProvider = ({ children }) => {
     }, [allSubDao])
 
     const handelAuth = () =>{
-
         setAuth((prev) => !prev)
     }
 
