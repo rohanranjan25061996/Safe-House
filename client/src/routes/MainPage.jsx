@@ -67,9 +67,6 @@ const MainPage = () => {
 			setUserAddress(addr);
 			handelAuth();
 		})
-			.then(() => {
-				getAllDAO();
-			})
 	}
 
 	const logoOutuser = () => {
@@ -93,7 +90,7 @@ const MainPage = () => {
 
 	useEffect(() => {
 		getAllDAO()
-	}, [])
+	}, [isAuth])
 
 	useEffect(() => {
 		allOwnersOfSubDAO()
@@ -219,7 +216,7 @@ const MainPage = () => {
 											</Box>
 									}
 									{/* <MenuItem onClick={handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={handleClose}>My account</MenuItem> */}
+                  						<MenuItem onClick={handleClose}>My account</MenuItem> */}
 								</Menu>
 							</div>
 						</div>
@@ -292,7 +289,7 @@ const MainPage = () => {
 			</Drawer>
 			{/*     Drawer Ends here   */}
 
-			<Main open={open} style={{ border: "1px solid red" }}>
+			<Main open={open}>
 				<DrawerHeader />
 
 				{/* For Handling Page Routes */}

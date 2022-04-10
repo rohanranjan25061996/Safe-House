@@ -7,7 +7,7 @@ import { ConfirmTransaction } from '../components/pages/ConfirmTransaction';
 
 const AllRoutes = () => {
     return (
-        <div style={{width: "100%", height: "100%"}}>
+        <div style={{width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "center"}} >
             <Routes>
                 <Route exact path="/" element={<Home />} />
                 <Route exact path="/create-safe" element={<CreateSafe />} />

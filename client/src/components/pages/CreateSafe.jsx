@@ -1,9 +1,20 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../../contextAPI/Auth';
 import { useMoralis } from "react-moralis";
-// import styles from "./../styles/MainPage.module.css";
-
+import Box from '@mui/material/Box';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import StepContent from '@mui/material/StepContent';
+import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { concatStringAddress, getMoralisOptionMainDAO, getProviderMainDAOWallet, getProviderSubDAOWallet } from "../../utils/helper";
+import styles from "../../styles/CreateSafe.module.css";
 
 const init = {
     safeName: '',
@@ -30,6 +41,21 @@ const CreateSafe = () => {
 
     const [loading, setLoading] = useState(false)
     const [form, setForm] = useState(init)
+
+
+    const [activeStep, setActiveStep] = React.useState(0);
+
+    const handleNext = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    };
+
+    const handleBack = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    };
+
+    const handleReset = () => {
+        setActiveStep(0);
+    };
 
     const getAllDAO = async () => {
         try {
@@ -163,22 +189,144 @@ const CreateSafe = () => {
         // addBrandNewSafe(form)
     }
 
-    return (
-        <div>
-            <div>
-                <input placeholder="safe Name" name="safeName" value={form.safeName} onChange={handelChange} />
-                <input placeholder="limit" name="limit" value={form.limit} onChange={handelChange} />
-                {form.owners.map((item, index) => <div>
-                    <input name={`owners.${index}.name`} value={item.name} onChange={handelChange} />
-                    <input name={`owners.${index}.address`} value={item.address} onChange={handelChange} />
-                    {index !== 0 && <button onClick={() => handelDelete(index)}>delete</button>}
-                </div>)}
+
+
+    const steps = [
+        {
+            label: 'Create Name',
+            content:
                 <div>
-                    <button onClick={addOwnersForm}>add owners</button>
-                    <button onClick={handelSubmit}>submit</button>
+                    <Typography className={styles.stepperText}>You are about to create a new Gnosis Safe wallet with one or more owners. First, let's give your new wallet a name.</Typography>
+                    <TextField
+                        id="outlined-basic"
+                        label="Safe Name"
+                        variant="outlined"
+                        placeholder='my-safe'
+                        name="safeName"
+                        value={form.safeName}
+                        onChange={handelChange}
+                        className={styles.stepperTextField}
+                    />
                 </div>
-            </div>
-        </div>
+        },
+        {
+            label: 'Owners and Confirmations',
+            content:
+                <div>
+                    <Typography className={styles.stepperText}>Your Safe will have one or more owners. We have prefilled the first owner with your connected wallet details, but you are free to change this to a different owner.</Typography>
+                    <Box />
+                    <Typography className={styles.stepperText}>Add additional owners (e.g. wallets of your teammates) and specify how many of them have to confirm a transaction before it gets executed. In general, the more confirmations required, the more secure your Safe is.</Typography>
+
+                        {form.owners.map((item, index) => <div className={styles.ownerRowWrapper}>
+                            <TextField
+                                label="Owner Name"
+                                variant="outlined"
+                                placeholder='owner-name'
+                                name={`owners.${index}.name`}
+                                value={item.name}
+                                onChange={handelChange}
+                                className={styles.stepperTextField}
+                            />
+                            <Box className={styles.space}/>
+                            <TextField
+                                label="Owner Address"
+                                variant="outlined"
+                                placeholder='owner-address'
+                                name={`owners.${index}.address`}
+                                value={item.address}
+                                onChange={handelChange}
+                                className={styles.stepperTextField}
+                            />
+                            <Box className={styles.space}/>
+                            {index !== 0 &&
+                                <IconButton onClick={() => handelDelete(index)}><DeleteIcon /></IconButton>
+                            }
+                        </div>)}
+                    <div>
+                        <Typography className={styles.stepperTextAdd} onClick={addOwnersForm}>+ Add another owner</Typography>
+                    </div>
+                    <div>
+                        <Typography className={styles.stepperText}>How many owners have to confirm a transaction before it gets executed?</Typography>
+                        <TextField
+                            label="Limit"
+                            variant="outlined"
+                            placeholder='1'
+                            name="limit"
+                            value={form.limit}
+                            onChange={handelChange}
+                            className={styles.stepperTextField}
+                        />
+                    </div>
+                </div>
+        },
+        {
+            label: 'Create an Safe',
+            content:
+                <div>
+                    <Typography>You're about to create a new Safe on Rinkeby and will have to confirm a transaction with your currently connected wallet. </Typography>
+                </div>
+        },
+    ];
+
+
+    return (
+
+        <>
+            <Box sx={{ maxWidth: 650 }}>
+                <Stepper activeStep={activeStep} orientation="vertical">
+                    {steps.map((step, index) => (
+                        <Step key={step.label}>
+                            <StepLabel
+                                optional={
+                                    index === 2 ? (
+                                        <Typography variant="caption">Last step</Typography>
+                                    ) : null
+                                }
+                            >
+                                {step.label}
+                            </StepLabel>
+                            <StepContent>
+                                <Paper elevation={3} className={styles.stepperCard}>
+                                    <Box className={styles.cardDivider}>
+                                        {step.content}
+                                    </Box>
+                                    <Divider />
+                                    <Box sx={{ mb: 2 }} className={styles.cardDivider}>
+                                        <div>
+                                            {
+                                                index === steps.length - 1 ?
+                                                    <Button
+                                                        variant="contained"
+                                                        onClick={handelSubmit}
+                                                        sx={{ mt: 1, mr: 1 }}
+                                                    >
+                                                        Submit
+                                                    </Button>
+                                                    :
+                                                    <Button
+                                                        variant="contained"
+                                                        onClick={handleNext}
+                                                        sx={{ mt: 1, mr: 1 }}
+                                                    >
+                                                        Continue
+                                                    </Button>
+                                            }
+                                            <Button
+                                                disabled={index === 0}
+                                                onClick={handleBack}
+                                                sx={{ mt: 1, mr: 1 }}
+                                            >
+                                                Back
+                                            </Button>
+                                        </div>
+                                    </Box>
+                                </Paper>
+                            </StepContent>
+                        </Step>
+                    ))}
+                </Stepper>
+            </Box>
+        </>
     )
 }
 

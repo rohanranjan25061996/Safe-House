@@ -1,0 +1,32 @@
+.pepperWrapper {
+    width: 450px;
+    padding: 20px;
+}
+
+.title {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+}
+
+.textFieldDiv{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.textFieldItem{
+    margin: 20px;
+    width: 90%;
+}
+
+.sendButton {
+    width: fit-content;
+}
+
+.space {
+    width: 10px;
+    height: 15px;
+}
