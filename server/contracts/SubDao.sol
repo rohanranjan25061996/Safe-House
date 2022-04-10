@@ -37,6 +37,10 @@ contract MultiSigner {
     // recived ether
     receive() external payable{}
 
+    function getBalaceOfContract() public view returns(uint){
+        return address(this).balance;
+    }
+
     constructor(address[] memory _owner, string[] memory _ownerName, uint _limit, string memory _safeName) {
         require(_owner.length > 0, "Owners Required !");
         require(_limit > 0 && _limit <= _owner.length, "Invalid number of required approver's !");
