@@ -1,8 +1,9 @@
 import React from "react";
+import SideBar from "./routes/NavBar"
 function App() {
   return (
     <>
-    <h1>Hi, Tripod Team</h1>
+    <SideBar />
     </>
   );
 }
