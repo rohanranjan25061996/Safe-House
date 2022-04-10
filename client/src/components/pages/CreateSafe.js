@@ -68,8 +68,8 @@ const CreateNewSafe = (props) => {
 
     const handelSubmit = () => {
         console.log("form data is => ", form)
-        // addNewSafe(form)
-        addBrandNewSafe(form)
+        addNewSafe(form)
+        // addBrandNewSafe(form)
     }
 
     return(
