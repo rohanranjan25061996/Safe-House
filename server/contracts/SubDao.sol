@@ -1,4 +1,4 @@
-//SPDX-License-Identifier: Unlicense
+// SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.4;
 
 contract MultiSigner {
@@ -19,26 +19,38 @@ contract MultiSigner {
         uint limit;
         uint id;
     }
+
+    struct OwnerDeatils{
+        address owner;
+        string name;
+    }
     Temp[] temp;
     Transaction[] public transactions;
-    address[] owners;
+    OwnerDeatils[] owners;
     uint public approversLimit;
+    string public safeName;
     mapping(address => bool) isOwner;
 
     // this multisigwallet function we can put in constructor, but now i don't know how to deploy contract from frontend, that why i create function
     // and also not putting validation for others functions.
 
-    constructor(address[] memory _owner, uint _limit) {
+    constructor(address[] memory _owner, string[] memory _ownerName, uint _limit, string memory _safeName) {
         require(_owner.length > 0, "Owners Required !");
         require(_limit > 0 && _limit <= _owner.length, "Invalid number of required approver's !");
+        require(_owner.length == _ownerName.length, "mismatch data of owner address and owner name");
+        bytes memory tempEmptyStringTest = bytes(_safeName);
+        require(tempEmptyStringTest.length != 0, "invalid safe name");
         for(uint i = 0; i < _owner.length; i++){
             address owner = _owner[i];
             require(owner != address(0), "Invalid Owner !");
             require(!isOwner[owner], "Owner not unique");
+            bytes memory temp1 = bytes(_ownerName[i]);
+            require(temp1.length != 0, "invalid owner name");
             isOwner[owner] = true;
-            owners.push(owner);
+            owners.push(OwnerDeatils(owner, _ownerName[i]));
         }
         approversLimit = _limit;
+        safeName = _safeName;
     }
 
     modifier onlyOwner(){
@@ -81,14 +93,20 @@ contract MultiSigner {
         _;
     }
 
-    function addOwner(address _add, uint _required) public nullCheck(_add) onlyOwner ownerExits(_add){
+    modifier checkEmptyString(string memory _str){
+        bytes memory tempEmptyStringTest = bytes(_str);
+        require(tempEmptyStringTest.length != 0, "invalid owner name");
+        _;
+    }
+
+    function addOwner(address _add, uint _required, string memory _ownerName) public nullCheck(_add) onlyOwner ownerExits(_add) checkEmptyString(_ownerName) {
         require(_required <= owners.length, "invalid required value");
         isOwner[_add] = true;
-        owners.push(_add);
+        owners.push(OwnerDeatils(_add, _ownerName));
         approversLimit +=  _required;
     }
 
-    function getAllOwnersList() public view returns(address[] memory){
+    function getAllOwnersList() public view returns(OwnerDeatils[] memory){
         return owners;
     }
 
@@ -141,7 +159,7 @@ contract MultiSigner {
     function removeOwner(address _owner) public nullCheck(_owner) checkValidOrNot(_owner) checkCurrentOwnerList(_owner)  {
         isOwner[_owner] = false;
         for(uint i = 0; i < owners.length; i++){
-            if(owners[i] == _owner){
+            if(owners[i].owner == _owner){
                 replaceAlgo(i);
                 break;
             }

@@ -58,10 +58,10 @@ contract MainDAO is Create2{
          mainId += 1;
     }
 
-    function createSubDAO(address[] memory _owners, uint _limit, address _walletAddress) public{
+    function createSubDAO(address[] memory _owners, string[] memory _ownerName, uint _limit, string memory _safeName, address _walletAddress) public{
         uint rand1 = getRandom();
         bytes32 _salt = getBytes(rand1);
-        address sub1 = createMultiSignerSalted(_salt, _owners, _limit);
+        address sub1 = createMultiSignerSalted(_salt, _owners, _ownerName, _limit, _safeName);
         address[] memory ok = new address[](1);
         ok[0] = sub1;
         start(_walletAddress, ok);
@@ -72,11 +72,18 @@ contract MainDAO is Create2{
         return allDAO[_id];
     }
 
-    function addSubDAO(address _walletAddress, address _subDAO) dataOrNot nullCheckAddress(_walletAddress) nullCheckAddress(_subDAO) 
-    userPersentOrNot(_walletAddress) public{
+    function addSubDAO(address _walletAddress, address _subDAO) private{
         uint _id = getId[_walletAddress];
         DAO storage temp = allDAO[_id];
         temp.subDAO.push(_subDAO);
+    }
+
+    function createNewSubDAO(address[] memory _owners, string[] memory _ownerName, uint _limit, string memory _safeName, address _walletAddress) dataOrNot nullCheckAddress(_walletAddress) userPersentOrNot(_walletAddress)
+     public{
+          uint rand1 = getRandom();
+          bytes32 _salt = getBytes(rand1);
+          address sub1 = createMultiSignerSalted(_salt, _owners, _ownerName, _limit, _safeName);
+          addSubDAO(_walletAddress, sub1);
     }
 
      function replaceAlgo(uint _index, uint _id) private{
@@ -86,6 +93,10 @@ contract MainDAO is Create2{
             temp.subDAO[i] = temp.subDAO[i+1];
         }
         temp.subDAO.pop();
+    }
+
+    function getBalanceSubDAO(address subDAO) public view returns(uint){
+        return address(subDAO).balance;
     }
 
     function deleteSubDAO(address _walletAddress, address _subDAO)dataOrNot nullCheckAddress(_walletAddress) nullCheckAddress(_subDAO) 
@@ -100,5 +111,10 @@ contract MainDAO is Create2{
             }
         }
         require(flag, "invalid sub DAO address");
+        uint amount = getBalanceSubDAO(_subDAO);
+        if(amount > 0){
+            address payable payBack = payable(_walletAddress);
+            payBack.transfer(amount);
+        }
     }
 }
