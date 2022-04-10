@@ -1,0 +1,62 @@
+.wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    z-index: 2500;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    backdrop-filter: blur(2px);
+}
+
+.alertModal {
+    width: 350px;
+    height: 250px;
+    height: fit-content;
+    background-color: #e7e7e7;
+    border: 2px solid #747d8c;
+    border-radius: 8px;
+    padding: 20px;
+    position: absolute;
+    top: 50%; right: 50%;
+    transform: translate(50%,-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.alertIcon {
+    font-size: 50px;
+    margin: 20px;
+}
+
+.contentModal {
+    width: 100%;
+}
+
+.alertButton {
+    padding: 8px 40px;
+    margin-top: 20px;
+    font-size: 15px;
+    color: white;
+    background-color: #3d8d73;
+    border-radius: 5px;
+    outline: none;
+    border-color: transparent;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+.alertButton:active {
+    background-color: #367e67;
+}

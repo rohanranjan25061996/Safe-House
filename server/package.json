@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "deploy": "npx hardhat run scripts/dao-scripts.js --network rinkeby"
+  },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.5",
     "@nomiclabs/hardhat-waffle": "^2.0.3",

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {useMoralis} from "react-moralis"
 import { getMoralisOptionMainDAO, getProviderMainDAOWallet, getProviderSubDAOWallet } from "../../utils/helper";
 import {AuthContext} from "../../contextAPI/Auth";
@@ -8,7 +8,7 @@ import CreateNewSafe from "./CreateSafe";
 const Main = () => {
 
     const [loading, setLoading] = React.useState(false)
-    const {userAddress, allSubDao, setAllSubDao, activeDAO}  = React.useContext(AuthContext)
+    const {balance, setBalance, userAddress, allSubDao, setAllSubDao, activeDAO}  = React.useContext(AuthContext)
     const {Moralis} = useMoralis();
 
     React.useEffect(() => {
@@ -17,6 +17,12 @@ const Main = () => {
 
     React.useEffect(() => {
         allOwnersOfSubDAO()
+    }, [activeDAO])
+
+    useEffect(() => { 
+        if(activeDAO !== ""){
+            getSubDAOBalance()
+        }
     }, [activeDAO])
 
     const getAllDAO = async () => {
@@ -40,6 +46,20 @@ const Main = () => {
             // const {error: txError} = parseOk
             // const {message} = txError
             // alert(`Error: ${message}`)
+        }
+    }
+
+    const getSubDAOBalance = async () => {
+        try{
+            // const bal = await Moralis.executeFunction(getMoralisOptionMainDAO('getBalaceOfContract'))
+            const provider = getProviderSubDAOWallet(activeDAO)
+            const bal = await provider.getBalaceOfContract()
+
+            let tempBal = bal.toNumber() * 1000000000000000000
+            setBalance(tempBal)
+            // console.log("=====sub DAO balance=====", tempBal)
+        }catch(error){
+            setLoading(false)
         }
     }
 
@@ -118,6 +138,8 @@ const Main = () => {
             // alert(`Error: ${message}`)
         }
     }
+
+    
     return(
         <>
         <CreateNewSafe addNewSafe = {addNewSafe} addBrandNewSafe = {addBrandNewSafe} />
