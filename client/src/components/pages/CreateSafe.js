@@ -1,6 +1,11 @@
-import React from "react";
-import {useMoralis} from "react-moralis"
+import React, { useState } from "react";
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
 import {AuthContext} from "../../contextAPI/Auth"
+import css from "../styles/AddNewDAO.module.css"
+import DeleteIcon from '@mui/icons-material/Delete';
+import Button from '@mui/material/Button';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 
 const init = {
     safeName: '',
@@ -20,9 +25,9 @@ const temp = {
 
 const CreateNewSafe = (props) => {
 
-    const {userAddress}  = React.useContext(AuthContext)
+    const {userAddress, setLoading}  = React.useContext(AuthContext)
     const [form, setForm] = React.useState(init)
-    const {addNewSafe, addBrandNewSafe} = props
+    const {addNewSafeData} = props
 
     React.useEffect(() => {
         const {owners} = form
@@ -66,26 +71,55 @@ const CreateNewSafe = (props) => {
         }
     }
 
-    const handelSubmit = () => {
-        console.log("form data is => ", form)
-        addNewSafe(form)
-        // addBrandNewSafe(form)
+    const handelSubmit = async () => {
+       if(form.limit !== '' && form.safeName){
+           const {owners} = form
+           let flag = false
+           owners.forEach((item) => {
+               if(item.name === ''){
+                flag = true
+               }
+           })
+
+           if(!flag){
+                setLoading(true)
+             await addNewSafeData(form)
+             setLoading(false)
+             setForm(init)
+           }
+       }
     }
 
     return(
         <>
-        <div>
-            <input placeholder="safe Name" name="safeName" value={form.safeName} onChange={handelChange} />
-            <input placeholder="limit" name="limit" value={form.limit} onChange={handelChange} />
-            {form.owners.map((item, index) => <div>
-                <input name={`owners.${index}.name`} value = {item.name} onChange={handelChange} />
-                <input name={`owners.${index}.address`} value = {item.address} onChange={handelChange} />
-                {index !== 0 && <button onClick={() => handelDelete(index)}>delete</button>}
-            </div>)}
-            <div>
-                <button onClick={addOwnersForm}>add owners</button>
-                <button onClick={handelSubmit}>submit</button>
+        <div className={css.main}>
+        <div className={css.container}>
+            <Box component="form">
+
+                <div className={css.text_1}>
+                    <TextField id="outlined-basic" label="Safe Name" variant="outlined" name="safeName" 
+                    value={form.safeName} style = {{width: '45%'}} onChange={handelChange} />
+
+                    <TextField id="outlined-basic" label="Limit" variant="outlined" name = "limit" 
+                    value={form.limit} style = {{width: '45%'}} onChange={handelChange} />
+                </div>
+                <div className={css.text_2}>
+                    {form.owners.map((item, index) =>  <div className={css.text_sub_1}>
+                    <TextField  id="outlined-basic" label="Owner Name" variant="outlined" 
+                    name={`owners.${index}.name`} value = {item.name} style = {{width: '45%'}} onChange={handelChange} />
+
+                    <TextField  id="outlined-basic" label="Owner Address" variant="outlined" 
+                    name={`owners.${index}.address`} style = {{width: '45%'}} onChange={handelChange} />
+                   {index !== 0 ?  <div> <DeleteIcon className={css.delete} onClick = {() => handelDelete(index)} /> </div> : <div></div>}
+                    </div>)}
+                </div>
+            </Box>
+            <div className={css.add_owners} onClick={addOwnersForm}>Add Owners</div>
+            <div className={css.button}>
+                <Button variant="outlined" className={css.button_1}>CANCEL</Button>
+                <Button variant="contained" className={css.button_2} onClick={handelSubmit}>SUBMIT</Button>
             </div>
+        </div>
         </div>
         </>
     )

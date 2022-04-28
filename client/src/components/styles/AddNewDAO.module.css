@@ -1,0 +1,65 @@
+.main{
+    width: 80%;
+    display: flex;
+    justify-content: center;
+}
+
+.lable{
+    width: 100%;
+    margin-top: 2%;
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container{
+    width: 80%;
+}
+
+.text_1{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: 20px;
+}
+
+.text_2{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+}
+
+.text_sub_1{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: 10px;
+    align-items: center;
+}
+
+.add_owners{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    text-decoration: underline;
+    cursor: pointer;
+    color: #04BFBD;
+    padding-top: 20px;
+}
+
+.delete{
+    cursor: pointer;
+    color: #04BFBD;
+}
+
+.button{
+    width: 25%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.button_1{
+    color: #04BFBD;
+}
