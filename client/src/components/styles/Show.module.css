@@ -1,0 +1,35 @@
+.add_new_safe{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 20px;
+}
+
+.add_new_safe_container{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    text-decoration: underline;
+    cursor: pointer;
+    color: #04BFBD;
+}
+
+.delete{
+    cursor: pointer;
+    color: #04BFBD;
+}
+
+.show_form{
+    width: 100%;
+    margin-top: 5%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.submit_btn{
+    background-color: #04BFBD;
+}
+
+.cancel_btn{
+    color: #04BFBD;
+}

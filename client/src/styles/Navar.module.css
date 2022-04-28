@@ -1,0 +1,21 @@
+.tick_div{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-content: center;
+    align-items: center;
+}
+
+.tick_div img{
+    background: transparent;
+}
+
+.all_safe{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-content: center;
+    align-items: center;
+    font-size: 25px;
+    color: #04BFBD;
+}

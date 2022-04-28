@@ -11,9 +11,6 @@ function App() {
   return (
     <>
       <SideBar />
-      {
-        alert.status == true && <Alert />
-      }
     </>
   );
 }

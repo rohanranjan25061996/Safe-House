@@ -26,10 +26,12 @@ import Stack from '@mui/material/Stack';
 import Transaction from '../components/pages/TxPage';
 import { AuthContext } from '../contextAPI/Auth';
 import {useMoralis} from "react-moralis"
-import {concatStringAddress} from "../utils/helper"
+import {concatStringAddress, concatStringAddressSubDAO} from "../utils/helper"
 import CreateNewSafe from '../components/pages/CreateSafe';
 import Main from '../components/pages/Main';
 import { ConfirmAlert } from '../components/ConfirmAlert';
+import TickMark from "../assets/tickMark1.png"
+import css from "../styles/Navar.module.css"
 
 const drawerWidth = 240;
 const settings = ['Logout'];
@@ -40,11 +42,12 @@ export default function ClippedDrawer() {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
-    const {balance, setBalance, isAuth, setUserAddress, handelAuth, userAddress, allSubDao, activeDAO, setActiveDAO} = React.useContext(AuthContext);
+    const {balance, isAuth, setUserAddress, 
+      handelAuth, userAddress, allSubDao, activeDAO, setActiveDAO,
+      setShowOwner, setShowTx} = React.useContext(AuthContext);
 
-    const {isAuthenticated, isWeb3Enabled, authenticate, enableWeb3, logout} = useMoralis();
+    const {isAuthenticated, isWeb3Enabled, authenticate, enableWeb3, logout, Moralis} = useMoralis();
 
-    console.log(allSubDao);
     React.useEffect(() => {
         if (!isWeb3Enabled && isAuthenticated) {
           enableWeb3({ provider: "walletconnect", chainId: 56 });
@@ -55,6 +58,7 @@ export default function ClippedDrawer() {
       const loginUser = async () => {
         authenticate({signingMessage: 'Welcome to Safe House App !'}).then((user) => {
            let addr = user.get("ethAddress")
+           console.log("user=======", Moralis.User.current())
            setUserAddress(addr);
            handelAuth();
       })
@@ -84,6 +88,18 @@ export default function ClippedDrawer() {
     const handleCloseUserMenu = () => {
       setAnchorElUser(null);
     };
+
+    const handelShowMenu = (value) => {
+
+      //Owner's`, `Transaction's
+      if(value === `Owner's`){
+        setShowTx(false)
+        setShowOwner(true)
+      }else if(value === `Transaction's`){
+        setShowOwner(false)
+        setShowTx(true)
+      }
+    }
 
     // uef
   return (
@@ -221,9 +237,18 @@ export default function ClippedDrawer() {
           {/* <ConfirmAlert /> */}
           <Divider />
           <List>
+            <div className={css.all_safe}>{isAuth && activeDAO !== '' ? 'All Safe' : ''}</div>
             {isAuth && allSubDao.length !== 0 && allSubDao.map((item) => (
               <ListItem button key={item}>
-              <ListItemText primary={concatStringAddress(item)} onClick={() => changeActiveDAO(item)} />
+              <ListItemText primary={activeDAO == item ? <div className={css.tick_div}>
+                <img src={TickMark} width={30} /> {concatStringAddressSubDAO(item)}</div> : 
+              concatStringAddressSubDAO(item) } onClick={() => changeActiveDAO(item)} />
+            </ListItem>
+            ))}
+            <Divider />
+            {isAuth && activeDAO !== '' && [`Owner's`, `Transaction's`].map((item) => (
+              <ListItem button key={item}>
+              <ListItemText primary={item} onClick={() => handelShowMenu(item)}/>
             </ListItem>
             ))}
           </List>
@@ -233,7 +258,7 @@ export default function ClippedDrawer() {
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
         <Typography paragraph>
-            {isAuth && <Main />}
+          {isAuth && <Main />}
         </Typography>
         <Typography paragraph>
           

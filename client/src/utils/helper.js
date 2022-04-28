@@ -66,3 +66,51 @@ export const concatStringAddress = (para) => {
     let string = `${start}...${end}`
     return string;
 }
+
+export const concatStringAddressSubDAO = (para) => {
+    let adr = para.split("")
+    let start = adr.slice(0, 10).join("")
+    let end = adr.slice(-5).join("")
+    let string = `${start}...${end}`
+    return string;
+}
+
+export const refineOwnerName = (data) => {
+
+    if(data){
+        let arr = []
+        console.log("data=====", data)
+        data?.forEach((item) => {
+            let obj = {}
+            obj = {
+                name: item.name,
+                address: item.owner
+            }
+            arr.push(obj)
+        })
+        return arr
+    }else{
+        return null
+    }
+}
+
+export const refineTxDeatils = (data) =>  {
+
+    if(data){
+        let arr = []
+        data?.forEach((item) => {
+            let obj = {}
+            obj = {
+                to: item.to,
+                value: item.value.toNumber(),
+                executed: item.executed,
+                limit: item.limit.toNumber(),
+                id: item.id.toNumber()
+            }
+            arr.push(obj)
+        })
+        return arr
+    }else{
+        return null
+    }
+}
