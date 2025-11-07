@@ -14,6 +14,8 @@ describe("Greeter", function () {
     // wait until the transaction is mined
     await setGreetingTx.wait();
 
+    // just checking git account
+
     expect(await greeter.greet()).to.equal("Hola, mundo!");
   });
 });
